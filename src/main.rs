@@ -3,13 +3,18 @@ use advent_code_2024_rust::day_01;
 use argparser::ArgParser;
 
 // Std library
-use std::process;
+use std::{env, process};
 
 fn main() {
-    let mut parser = ArgParser::new("Advent of Code 2024");
-    parser.add_arg("--test", "This is a test argument");
-    parser.add_arg("--test2", "This is a second test argument");
-    parser.print_help();
+    let args: Vec<String> = env::args().collect();
+    println!("{}", args[0]);
+    let mut parser = ArgParser::new(env::args(), "Advent of Code 2024");
+    parser.add_arg("day", "The advent day", true);
+    parser.add_arg("part", "The challenge part for the day", true);
+    if let Err(err) = parser.parse_args() {
+        println!("{}", err);
+        process::exit(1);
+    };
 
     if let Err(err) = day_01::part1::solve() {
         eprintln!("Application error: {err}");

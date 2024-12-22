@@ -116,7 +116,7 @@ impl ArgParser {
         Ok(())
     }
 
-    pub fn get(&mut self, arg: &str) -> Option<&str> {
+    pub fn get(&self, arg: &str) -> Option<&str> {
         let idx = self.args_map.get(arg)?;
         Some(self.args[*idx].as_str())
     }

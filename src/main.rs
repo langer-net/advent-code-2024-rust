@@ -1,9 +1,9 @@
 // Internal
 use advent_code_2024_rust::day_01;
 use argparser::ArgParser;
+use AppErrors::{NoValidCombinationError, ParseArgsError, SolvingFailedError};
 
 // Std library
-use crate::AppErrors::{NoValidCombinationError, ParseArgsError, SolvingFailedError};
 use std::error::Error;
 use std::{env, process};
 

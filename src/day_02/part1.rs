@@ -9,6 +9,23 @@ enum Sorting {
     Descending,
 }
 
+fn validate_sorting(sorting: &mut Option<Sorting>, difference: i32) -> bool {
+    match difference {
+        1..=i32::MAX => match sorting {
+            Some(Sorting::Descending) => return false,
+            None => *sorting = Some(Sorting::Ascending),
+            _ => {}
+        },
+        i32::MIN..=-1 => match sorting {
+            Some(Sorting::Ascending) => return false,
+            None => *sorting = Some(Sorting::Descending),
+            _ => {}
+        },
+        _ => {}
+    }
+    true
+}
+
 fn check_if_safe(numbers: Vec<i32>) -> bool {
     if numbers.is_empty() {
         return false;
@@ -23,31 +40,13 @@ fn check_if_safe(numbers: Vec<i32>) -> bool {
     for number in numbers {
         let difference = number - previous_number;
         previous_number = number;
-        if difference.abs() > 3 {
+
+        if difference.abs() > 3 || difference == 0 {
             return false;
         }
-        match difference {
-            0 => return false,
-            1..=i32::MAX => {
-                if let Some(sorting) = &sorting {
-                    match sorting {
-                        Sorting::Ascending => continue,
-                        Sorting::Descending => return false,
-                    }
-                } else {
-                    sorting = Some(Sorting::Ascending);
-                }
-            }
-            i32::MIN..0 => {
-                if let Some(sorting) = &sorting {
-                    match sorting {
-                        Sorting::Ascending => return false,
-                        Sorting::Descending => continue,
-                    }
-                } else {
-                    sorting = Some(Sorting::Descending);
-                }
-            }
+
+        if !validate_sorting(&mut sorting, difference) {
+            return false;
         }
     }
 

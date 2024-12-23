@@ -1,10 +1,11 @@
+// Std library
 use std::error::Error;
 use std::fs;
 use std::path::Path;
 
 pub fn solve() -> Result<(), Box<dyn Error>> {
     // Load the data.
-    let data_path = Path::new("./data/day_01_1.txt");
+    let data_path = Path::new("./data/day_01.txt");
     let content = fs::read_to_string(data_path)?;
 
     // Read get the data per line.
@@ -17,7 +18,7 @@ pub fn solve() -> Result<(), Box<dyn Error>> {
 
     // Iterate over all lines and fill the vectors.
     for line in content.lines() {
-        let mut numbers = line.split("   ");
+        let mut numbers = line.split_whitespace();
         if let Some(number) = numbers.next() {
             numbers_left.push(number.parse()?);
         }

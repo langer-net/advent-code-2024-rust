@@ -10,6 +10,10 @@ enum Sorting {
 }
 
 fn validate_sorting(sorting: &mut Option<Sorting>, difference: i32) -> bool {
+    if difference.abs() > 3 || difference == 0 {
+        return false;
+    }
+
     match difference {
         1..=i32::MAX => match sorting {
             Some(Sorting::Descending) => return false,
@@ -40,10 +44,6 @@ fn check_if_safe(numbers: Vec<i32>) -> bool {
     for number in numbers {
         let difference = number - previous_number;
         previous_number = number;
-
-        if difference.abs() > 3 || difference == 0 {
-            return false;
-        }
 
         if !validate_sorting(&mut sorting, difference) {
             return false;

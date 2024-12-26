@@ -30,24 +30,45 @@ fn validate_sorting(sorting: &mut Option<Sorting>, difference: i32) -> bool {
     true
 }
 
-fn check_if_safe(numbers: Vec<i32>) -> bool {
-    if numbers.is_empty() {
-        return false;
+fn check_with_problem_dampener(numbers: Vec<i32>) -> bool {
+    for i in 0..numbers.len() {
+        let mut modified_numbers = numbers.clone();
+        modified_numbers.remove(i);
+        if check_if_sequence_safe(&modified_numbers) {
+            return true;
+        }
     }
 
+    false
+}
+
+fn check_if_sequence_safe(numbers: &Vec<i32>) -> bool {
     // Get the first number.
-    let mut numbers = numbers.into_iter();
-    let mut previous_number = numbers.next().unwrap();
+    let mut numbers_iter = numbers.iter();
+    let mut previous_number = numbers_iter.next().unwrap();
     let mut sorting: Option<Sorting> = None;
 
     // Iterate over the numbers.
-    for number in numbers {
+    for number in numbers_iter {
         let difference = number - previous_number;
         previous_number = number;
 
         if !validate_sorting(&mut sorting, difference) {
             return false;
         }
+    }
+    true
+}
+
+fn check_if_safe(numbers: Vec<i32>) -> bool {
+    if numbers.is_empty() {
+        return false;
+    }
+
+    // First analysis of the sequence.
+    if !check_if_sequence_safe(&numbers) {
+        // Recheck the sequence by ignoring one error.
+        return check_with_problem_dampener(numbers);
     }
 
     true
@@ -77,7 +98,7 @@ pub fn solve() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    println!("Day 02: Part 1: Number of save reports: {}", safe_counter);
+    println!("Day 02: Part 2: Number of save reports: {}", safe_counter);
 
     Ok(())
 }

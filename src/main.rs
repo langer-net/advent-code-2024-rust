@@ -19,6 +19,7 @@ fn run_day_part(day: &str, part: &str) -> Result<(), Box<dyn Error>> {
         ("01", "1") => day_01::part1::solve(),
         ("01", "2") => day_01::part2::solve(),
         ("02", "1") => day_02::part1::solve(),
+        ("02", "2") => day_02::part2::solve(),
         _ => {
             eprintln!("Application error: No valid day & part combination was given.");
             process::exit(NoValidCombinationError as i32);

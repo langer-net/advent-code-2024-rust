@@ -21,12 +21,21 @@ pub fn solve() -> Result<(), Box<dyn Error>> {
     let content = fs::read_to_string(data_path)?;
     let mut total_sum = 0;
 
-    // Check each string part.
-    let parts = content.split("mul(").flat_map(|part| part.split(")"));
-    for part in parts {
-        if let Some(mul_result) = check_part(part) {
+    let mul_start_indices: Vec<_> = content
+        .match_indices("mul(")
+        .map(|(index, _)| index)
+        .collect();
+    let mul_end_indices: Vec<_> = content.match_indices(")").map(|(index, _)| index).collect();
+    let matches = mul_start_indices.iter().map(|&i_start| {
+        let i_end = mul_end_indices.iter().find(|&&i| i >= i_start).map(|&i| i);
+        // + 4 to remove the "mul(" offset.
+        (i_start + 4, i_end.unwrap())
+    });
+
+    for i_match in matches {
+        if let Some(mul_result) = check_part(&content[i_match.0..i_match.1]) {
             total_sum += mul_result;
-        };
+        }
     }
 
     println!("Day 03: Part 1: Total sum: {}", total_sum);
